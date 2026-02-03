@@ -6,7 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from htmlTemplate import css, user_template, bot_template
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import faiss
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
@@ -56,7 +56,7 @@ def get_vectorstore(text_chunks):
         model_kwargs={"device": "cuda", "trust_remote_code": True},
         encode_kwargs={"batch_size": 64, "normalize_embeddings": True}
     )
-    return Chroma.from_texts(texts=text_chunks, embedding=embed)
+    return faiss.from_texts(texts=text_chunks, embedding=embed)
 
 
 def get_qa_chain(vector_store, llm):
@@ -140,3 +140,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
